@@ -1,0 +1,6 @@
+
+TrainingImages/
+trainner.yml
+venv/
+__pycache__/
+labels.pickle
