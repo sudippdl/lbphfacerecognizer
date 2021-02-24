@@ -74,4 +74,4 @@ def user_input():
     capture(name, unique_id)
 
 
-user_input()
+# user_input()
