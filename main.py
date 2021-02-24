@@ -7,7 +7,9 @@ import pickle
 from detectionPart import capture
 from trainingPart import training_lbph
 from recognizerPart import our_recognition
-
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+label_path = os.path.join(BASE_DIR, "labels.pickle")
 
 window = tk.Tk()
 window.title("Face Recognizer")
@@ -83,29 +85,28 @@ def user_input():
     print(name)
     writable = True
     # for unique num
-    pickle_file = open("labels.pickle", 'rb')
-    namefile = pickle.load(pickle_file)
-    namelist = list(namefile)
-    unique_num = []
-    for name_ in namelist:
-        unique_num.append(name_.split('(')[1].split(")")[0])
-    print(unique_num)
-    # if entered id is in unique_num writable is false
-    if unique_id in unique_num:
-        writable=False
-        print("Do not write this")
+    if os.path.exists(label_path):
+
+        pickle_file = open("labels.pickle", 'rb')
+        namefile = pickle.load(pickle_file)
+        namelist = list(namefile)
+        unique_num = []
+        for name_ in namelist:
+            unique_num.append(name_.split('(')[1].split(")")[0])
+        print(unique_num)
+        # if entered id is in unique_num writable is false
+        if unique_id in unique_num:
+            writable=False
+            print("Do not write this")
 
 
-    if(is_number(unique_id) and name.isalpha() and writable):
+    if(is_number(unique_id) and writable):
         print(unique_id)
         capture(name, unique_id)
         res = "Images Saved ( " + unique_id +" : "+ name + " )"
         message.configure(text=res)
     else:
-        if(is_number(unique_id)):
-            res = "Enter Alphabetical Name"
-            message.configure(text= res)
-        if(name.isalpha()):
+        if not (is_number(unique_id)):
             res = "Enter Numeric Id"
             message.configure(text= res)
         if not writable:
